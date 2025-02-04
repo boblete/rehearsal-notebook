@@ -91,6 +91,26 @@
     resize: vertical; /* Optional: Allow the user to resize the textarea vertically */
 }
 
+/* Add diary button styles */
+.add-diary-entry-button {
+  background-color: #ffcc00; /* Bright yellow background */
+  color: black; /* Black text color */
+  border: none; /* Remove border */
+  padding: 15px 20px; /* Larger padding */
+  font-size: 1.2em; /* Larger font size */
+  border-radius: 50px; /* Rounded button */
+  cursor: pointer; /* Change cursor to pointer */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow for prominence */
+  transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover effect */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-diary-entry-button:hover {
+  background-color: #ffdd55; /* Slightly lighter yellow on hover */
+  transform: scale(1.05); /* Slight scale up on hover */
+}
 .modal {
   position: fixed;
   top: 50%;

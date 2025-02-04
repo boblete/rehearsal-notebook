@@ -100,7 +100,7 @@ function App() {
 
   return (    
     <> <div className='top-bar'>
-    <h2>Rehearsal Notes</h2>
+    <h2>Rehearsal Note Diary</h2>
     </div>
       <div className="app-container">
        
@@ -126,11 +126,15 @@ function App() {
           
              <div className="entry-content">              
               <p>Click the plus to start writing today's entry</p>
+            
             </div>
-            <button className="add-button" onClick={() => setShowForm(!showForm)}>+</button>
+            <button className="add-button" onClick={() => setShowForm(!showForm)}>
+              + Add Entry
+            </button>
+            
           </div>
           <ul className="date-list">
-            {getUniqueDates().map(date => (
+          {getUniqueDates().map(date => (
               <li
                 key={date}
                 className={selectedDate === date ? 'selected' : ''}
@@ -155,5 +159,6 @@ function App() {
 }
 
 export default App;
+
 
 
