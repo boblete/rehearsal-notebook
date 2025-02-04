@@ -137,6 +137,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   z-index: 1050; /* Higher z-index to ensure it's on top */
 }
-
-
-
+  .modal {
+    width: 70%;
+    font-size: 0.9em;
+  }

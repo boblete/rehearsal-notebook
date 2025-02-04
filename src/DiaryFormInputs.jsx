@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-
+import React, { useState, useRef, useEffect } from 'react'
+import Modal from 'react-modal'
 
 const DiaryFormInputs = ({ formData, setFormData }) => {
     const [imageUrls, setImageUrls] = useState([]);
@@ -7,6 +7,8 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
     const [newImageBlob, setNewImageBlob] = useState(null);
     const [cameraStream, setCameraStream] = useState(null);
     const [cameraError, setCameraError] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const videoRef = useRef(null);
     const handleInputChange = (event) => {
 
@@ -14,7 +16,7 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
         setFormData((prevFormData) => ({
             ...prevFormData,
             [name]: value,
-        }));
+        }))
     };
 
     const handleFileChange = (event) => {
@@ -32,27 +34,28 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
             }
         }
     };
+    
     const handleAddImage = () => {
         if (newImageUrl) {
             setImageUrls(prevImageUrls => [...prevImageUrls, newImageUrl]);
             setFormData(prevFormData => ({
                 ...prevFormData,
-                imageUrls: [...prevFormData.imageUrls || [], newImageUrl]
+                imageUrls: [...(prevFormData.imageUrls || []), newImageUrl]
             }));
-            setNewImageUrl(''); // Clear the URL input field
-            return
-        }
-
-        if (newImageBlob) {
+            setNewImageUrl('');
+        } else if (newImageBlob) {
             setImageUrls(prevImageUrls => [...prevImageUrls, newImageBlob]);
             setFormData(prevFormData => ({
                 ...prevFormData,
-                imageUrls: [...prevFormData.imageUrls || [], newImageBlob]
+                imageUrls: [...(prevFormData.imageUrls || []), newImageBlob]
             }));
-            setNewImageBlob(null); // Clear the file input
-            hiddenFileInput.current.value = null;
+            setNewImageBlob(null);
+            hiddenFileInput.current.value = '';
         }
-    };
+      };
+    useEffect(() => {
+      setFormData(prevFormData => ({ ...prevFormData, imageUrls: imageUrls }));
+    }, [imageUrls]);
 
     const hiddenFileInput = useRef(null);
     const handleCameraClick = event => {
@@ -106,7 +109,7 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
             setCameraStream(null);
         }
     };
-    
+
     useEffect(() => {
         return () => stopCamera();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -133,13 +136,38 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
                 </select>
             </div>
             <div className="form-group">
-                <label htmlFor="overview">Overview:</label>
+                <label htmlFor="overview">
+                    Overview
+                    <button type="button" onClick={() => setIsModalOpen(true)}>
+                        ?
+                    </button>
+                </label>
                 <textarea
                     id="overview"
                     name="overview"
                     value={formData.overview}
                     onChange={handleInputChange}
                 />
+                <Modal
+                    isOpen={isModalOpen}
+                    onRequestClose={() => setIsModalOpen(false)}
+                    contentLabel="Overview Help"
+                    className="modal"
+                    overlayClassName="modal-overlay"
+                >
+                    <h2>Overview Instructions</h2>
+                    <p>Briefly summarize the events of the rehearsal.</p>
+                    <p>Note how the director managed the rehearsal and whatever difficulties/successes occurred.</p>
+                    <p>Verbalize one main “take-away” lesson from the rehearsal.</p>
+                    <p>other suggestions for things one might use in a post include:</p>
+                    <ul>
+                        <li>Light analysis of rehearsal’s scenes/songs/blocking</li>
+                        <li>Relate rehearsal events to readings/recent lessons in acting/voice/dance/etc</li>
+                        <li>Describe personal character choices/revelations</li>
+                        <li>Analyze the rehearsal practices of other actors/director/etc whom you look up to</li>
+                        <li>List areas in which you did well and areas in which you need to improve, Record questions you may have for the director in the next rehearsal</li>
+                    </ul>
+                    <button type="button" onClick={() => setIsModalOpen(false)}>Close</button>                </Modal>
 
             </div>
             <div className="form-group">
@@ -160,18 +188,18 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
                     onChange={handleInputChange}
                 />
             </div>
-            
+
             <div className="feedback-container">
-            <div className="form-group feedback-box">
-                <label htmlFor="whatNeedsImprovement">What Needs Improvement:</label>
-                <textarea
-                    id="whatNeedsImprovement"
-                    name="whatNeedsImprovement"
-                    value={formData.whatNeedsImprovement}
-                    onChange={handleInputChange}
-                />
-            </div>
-            
+                <div className="form-group feedback-box">
+                    <label htmlFor="whatNeedsImprovement">What Needs Improvement:</label>
+                    <textarea
+                        id="whatNeedsImprovement"
+                        name="whatNeedsImprovement"
+                        value={formData.whatNeedsImprovement}
+                        onChange={handleInputChange}
+                    />
+                </div>
+
             <div className="form-group feedback-box">
                 <label htmlFor="whatWentWell">What Went Well:</label>
                 <textarea
@@ -192,24 +220,31 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
                         </button>
                     </div>
                 ))}
-            </div>
-            <div className="form-group">
-                <input type="text" placeholder="Image URL" value={newImageUrl} onChange={(e) => setNewImageUrl(e.target.value)} />
+                <div className="form-group">
+                    <input
+                        type="text"
+                        placeholder="Image URL"
+                        value={newImageUrl}
+                        onChange={(e) => setNewImageUrl(e.target.value)}
+                    />
 
-                <input type="file"
-                    ref={hiddenFileInput}
-                    onChange={handleCameraChange} style={{ display: 'none' }} />
+                    <input
+                        type="file"
+                        ref={hiddenFileInput}
+                        onChange={handleCameraChange}
+                        style={{ display: 'none' }}
+                    />
                     <button type="button" onClick={handleAddImage}>
-                    Add Image
+                        Add Image
                     </button>
                     <button type="button" onClick={handleCameraClick}>
-                    📸 Choose File
-                </button>
-            </div>
-             <div className="form-group camera-container">
-                <div>
-                    <button type="button" onClick={handleCameraStart}>📸 Use Camera</button>
-                    {cameraError && <span className="error-message">{cameraError}</span>}
+                        📸 Choose File
+                    </button>
+                </div>
+                <div className="form-group camera-container">
+                    <div>
+                        <button type="button" onClick={handleCameraStart}>📸 Use Camera</button>
+                        {cameraError && <span className="error-message">{cameraError}</span>}
                 </div>
                 {cameraStream && (
                     <div className='camera-video'>
@@ -217,6 +252,7 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
                         <button type="button" onClick={handleCapturePhoto}>Capture Photo</button> 
                     </div>
                 )}
+                </div>
             </div>
         </>
     );

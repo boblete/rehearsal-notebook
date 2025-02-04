@@ -4,7 +4,7 @@ import DiaryFormInputs from './DiaryFormInputs';
 const DiaryForm = ({ onSubmit,initialData }) => {
   const [formData, setFormData] = useState(initialData || {
     overview: '',
-    rating: 0,
+    rating: 3,
     actorNotes: '',
     costumeNotes: '',
     timestamp: Date.now(), //add timestamp
@@ -15,7 +15,7 @@ const DiaryForm = ({ onSubmit,initialData }) => {
     onSubmit(formData);
     setFormData({
       overview: '',
-      rating: 0,
+      rating: 3,
       actorNotes: '',
       costumeNotes: '',
       

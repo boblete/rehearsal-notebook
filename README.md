@@ -1,8 +1,10 @@
-# React + Vite
+# REHEARSAL NOTEBOOK
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+REHEARSAL NOTEBOOK is a note-taking app designed specifically for rehearsals. It allows users to document their rehearsal process and keep track of key details.
 
-Currently, two official plugins are available:
+**Key Features:**
+-   **Rating System:** Rate each rehearsal out of 5 stars.
+-   **Note-Taking:** Write notes about various aspects of the rehearsal, including attendance, staging/costumes, what went well, and areas that need improvement.
+-   **Image Integration:** Add images to each entry, either from files or directly from your device's camera.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
