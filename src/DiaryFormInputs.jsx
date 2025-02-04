@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+
 
 const DiaryFormInputs = ({ formData, setFormData }) => {
     const [imageUrls, setImageUrls] = useState([]);
     const [newImageUrl, setNewImageUrl] = useState('');
     const [newImageBlob, setNewImageBlob] = useState(null);
+    const [cameraStream, setCameraStream] = useState(null);
+    const [cameraError, setCameraError] = useState(null);
+    const videoRef = useRef(null);
     const handleInputChange = (event) => {
 
         const { name, value } = event.target;
@@ -22,7 +26,7 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
                     setNewImageBlob(reader.result);
                 };
                 reader.readAsDataURL(selectedFile);
-            } else {
+            } else { 
                 alert('Please select an image file.');
                 event.target.value = null; // Clear the file input
             }
@@ -46,10 +50,67 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
                 imageUrls: [...prevFormData.imageUrls || [], newImageBlob]
             }));
             setNewImageBlob(null); // Clear the file input
+            hiddenFileInput.current.value = null;
         }
-        
     };
 
+    const hiddenFileInput = useRef(null);
+    const handleCameraClick = event => {
+        hiddenFileInput.current.click();
+    };
+
+    const handleCameraChange = (event) => {
+        const fileUploaded = event.target.files[0];
+        event.target.value = '';
+        if (fileUploaded) {
+            handleFileChange(event);
+        }
+    };
+    const handleCameraStart = async () => {
+        setCameraError(null);
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true })
+            if (videoRef.current) {
+                videoRef.current.srcObject = stream
+                setCameraStream(stream)
+            }
+        } catch (error) {
+            setCameraStream(null);
+            setCameraError("Could not access camera");
+            console.error("Error accessing the camera:", error)
+        }
+    }
+
+
+    const handleCapturePhoto = () => {
+        if (videoRef.current && cameraStream) {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = videoRef.current.videoWidth;
+            canvas.height = videoRef.current.videoHeight;
+            context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+            canvas.toBlob((blob) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    setNewImageBlob(reader.result);
+                };
+                reader.readAsDataURL(blob);
+            });
+            stopCamera();
+        }
+    };
+
+    const stopCamera = () => {
+        if (cameraStream) {
+            cameraStream.getTracks().forEach((track) => track.stop());
+            setCameraStream(null);
+        }
+    };
+    
+    useEffect(() => {
+        return () => stopCamera();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[]);
     const handleDeleteImage = (index) => {
         setImageUrls(currentImageUrls => currentImageUrls.filter((_, i) => i !== index));
         setFormData(prevFormData => ({
@@ -132,13 +193,30 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
                     </div>
                 ))}
             </div>
-
             <div className="form-group">
                 <input type="text" placeholder="Image URL" value={newImageUrl} onChange={(e) => setNewImageUrl(e.target.value)} />
-                <input type="file" onChange={handleFileChange} />
-                <button type="button" onClick={handleAddImage}>
+
+                <input type="file"
+                    ref={hiddenFileInput}
+                    onChange={handleCameraChange} style={{ display: 'none' }} />
+                    <button type="button" onClick={handleAddImage}>
                     Add Image
+                    </button>
+                    <button type="button" onClick={handleCameraClick}>
+                    📸 Choose File
                 </button>
+            </div>
+             <div className="form-group camera-container">
+                <div>
+                    <button type="button" onClick={handleCameraStart}>📸 Use Camera</button>
+                    {cameraError && <span className="error-message">{cameraError}</span>}
+                </div>
+                {cameraStream && (
+                    <div className='camera-video'>
+                         <video ref={videoRef} autoPlay style={{width:'100%'}}/>
+                        <button type="button" onClick={handleCapturePhoto}>Capture Photo</button> 
+                    </div>
+                )}
             </div>
         </>
     );
