@@ -40,6 +40,8 @@ function App() {
             rating: formData.rating,
             attendanceNotes: formData.attendanceNotes,            
             costumeStageNotes: formData.costumeStageNotes,
+            whatWentWell: formData.whatWentWell,
+            whatNeedsImprovement: formData.whatNeedsImprovement,
             imageUrls: formData.imageUrls,
             timeStamp: editFormData.timeStamp
           };
@@ -60,6 +62,8 @@ function App() {
         attendanceNotes: formData.attendanceNotes,
         imageUrls: formData.imageUrls,
         costumeStageNotes: formData.costumeStageNotes,
+        whatWentWell: formData.whatWentWell,
+        whatNeedsImprovement: formData.whatNeedsImprovement
       };
       console.log("New Entry Object:", newEntryObject);
       setEntries([...entries, newEntryObject]);    

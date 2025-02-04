@@ -45,6 +45,12 @@ function NotebookEntry({ entry, onDelete, onEdit }) {
             <p>Overview: {entry.overview}</p>
             <p>Attendance Notes: {entry.attendanceNotes}</p>
             <p>Costume/Stage Notes: {entry.costumeStageNotes}</p>
+            {entry.whatNeedsImprovement && (
+              <p>What Needs Improvement: {entry.whatNeedsImprovement}</p>
+            )}
+            {entry.whatWentWell && (
+              <p>What Went Well: {entry.whatWentWell}</p>
+            )}
 
             <div className="image-list">
           {(entry.imageUrls || []).map((img, index) => (

@@ -45,7 +45,7 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
                 ...prevFormData,
                 imageUrls: [...prevFormData.imageUrls || [], newImageBlob]
             }));
-            setNewImageFile(null); // Clear the file input
+            setNewImageBlob(null); // Clear the file input
         }
         
     };
@@ -99,6 +99,28 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
                     onChange={handleInputChange}
                 />
             </div>
+            
+            <div className="feedback-container">
+            <div className="form-group feedback-box">
+                <label htmlFor="whatNeedsImprovement">What Needs Improvement:</label>
+                <textarea
+                    id="whatNeedsImprovement"
+                    name="whatNeedsImprovement"
+                    value={formData.whatNeedsImprovement}
+                    onChange={handleInputChange}
+                />
+            </div>
+            
+            <div className="form-group feedback-box">
+                <label htmlFor="whatWentWell">What Went Well:</label>
+                <textarea
+                    id="whatWentWell"
+                    name="whatWentWell"
+                    value={formData.whatWentWell}
+                    onChange={handleInputChange}
+                />
+            </div>
+        </div>
             {/* Display the list of images */}
             <div className="image-list">
                 {imageUrls.map((img, index) => (
