@@ -35,7 +35,8 @@
   width:100%;
 }
 .entry-area{
-  min-width: 70%;
+  width: 70%;
+  min-width: 250px;
 }
 .entries {
     width: 70%; /* Adjust the width as needed */
