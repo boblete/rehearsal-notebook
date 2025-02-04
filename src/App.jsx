@@ -99,7 +99,11 @@ function App() {
   };
 
   return (    
+    <> <div className='top-bar'>
+    <h2>Rehearsal Notes</h2>
+    </div>
       <div className="app-container">
+       
           <div className="entry-area">
           {showForm && <DiaryForm onSubmit={handleSubmit} initialData={editFormData} />}
           {!showForm && selectedDate && (
@@ -114,16 +118,15 @@ function App() {
           )}
        
           
-          {!showForm && !entries.find(e => e.date === selectedDate) && (
-            <div className="entry-content">              
-              <p>Click the plus to start writing</p>
-            </div>
-          )}
+    
         </div>
         
          <div className="sidebar">
           <div className="date-list-header">
-            <h2>Rehearsal Notes</h2>
+          
+             <div className="entry-content">              
+              <p>Click the plus to start writing today's entry</p>
+            </div>
             <button className="add-button" onClick={() => setShowForm(!showForm)}>+</button>
           </div>
           <ul className="date-list">
@@ -147,7 +150,7 @@ function App() {
             </div>
           </div>)}
       </div>
-    
+    </>
   )
 }
 

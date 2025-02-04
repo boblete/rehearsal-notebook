@@ -33,6 +33,9 @@ function NotebookEntry({ entry, onDelete, onEdit }) {
   };
   return (
     <div className="notebook-entry-container">
+       <div className="entry-date">
+        <p>{formattedDate} {formattedTime}</p>        
+      </div>
       <div className="notebook-entry">
           <div className="entry-content">
           <div className="entry-details">
@@ -44,7 +47,7 @@ function NotebookEntry({ entry, onDelete, onEdit }) {
             <p>Costume/Stage Notes: {entry.costumeStageNotes}</p>
 
             <div className="image-list">
-          {entry.imageUrls.map((img, index) => (
+          {(entry.imageUrls || []).map((img, index) => (
             <div key={index} className="image-item">
                          {typeof img === 'string' ? (
                             <img src={img} alt={`Uploaded ${index + 1}`} style={{ maxWidth: '100px', maxHeight: '100px' }} />
@@ -62,9 +65,7 @@ function NotebookEntry({ entry, onDelete, onEdit }) {
           <button className="delete-button" onClick={() => onDelete(entry.timestamp)}>Delete</button>
         </div>
       </div>
-      <div className="entry-date">
-        <p>{formattedDate} {formattedTime}</p>        
-      </div>
+     
     </div>
   );
 }
