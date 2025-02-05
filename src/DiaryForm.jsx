@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import DiaryFormInputs from './DiaryFormInputs';
-
-const DiaryForm = ({ onSubmit,initialData }) => {
-  const [formData, setFormData] = useState(initialData || {
+  
+const DiaryForm = ({ onSubmit, onCancel, initialData }) => {
+  const [formData, setFormData] = useState(initialData|| {
     overview: '',
     rating: 3,
     actorNotes: '',
@@ -11,11 +11,21 @@ const DiaryForm = ({ onSubmit,initialData }) => {
   });
 
   const handleSubmit = (event) => {
-    event.preventDefault();
-    onSubmit(formData);
-    setFormData({
+        event.preventDefault();
+        onSubmit(formData);
+        resetForm();
+        
+      };
+      const handleCancel = () => {
+        resetForm();
+        onCancel();
+      };
+      const resetForm = () => {
+      setFormData({
       overview: '',
       rating: 3,
+      
+      
       actorNotes: '',
       costumeNotes: '',
       
@@ -26,10 +36,12 @@ const DiaryForm = ({ onSubmit,initialData }) => {
   return (
     <form onSubmit={handleSubmit} className="diary-form">
       <DiaryFormInputs formData={formData} setFormData={setFormData} />
-   
-    
-      <button type="submit">Save Entry</button>
-      
+
+      <div className='form-buttons'>
+        <button type="submit">Save Entry</button>
+        <button type="button" onClick={handleCancel}>Cancel</button>
+      </div>
+
     </form>
   );
 };

@@ -18,9 +18,14 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
             [name]: value,
         }))
     };
+    
+    useEffect(() => {
+        if (newImageBlob) handleAddImage();
+    }, [newImageBlob]);
 
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
+        console.log(selectedFile,event,hiddenFileInput)
         if (selectedFile) {
             if (selectedFile.type.startsWith('image/')) {
                 const reader = new FileReader();
@@ -28,6 +33,7 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
                     setNewImageBlob(reader.result);
                 };
                 reader.readAsDataURL(selectedFile);
+               
             } else { 
                 alert('Please select an image file.');
                 event.target.value = null; // Clear the file input
@@ -36,7 +42,7 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
     };
     
     const handleAddImage = () => {
-        if (newImageUrl) {
+        if (newImageUrl) { // Handle adding from url
             setImageUrls(prevImageUrls => [...prevImageUrls, newImageUrl]);
             setFormData(prevFormData => ({
                 ...prevFormData,
@@ -44,7 +50,7 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
             }));
             setNewImageUrl('');
         } else if (newImageBlob) {
-            setImageUrls(prevImageUrls => [...prevImageUrls, newImageBlob]);
+            setImageUrls(prevImageUrls => [...prevImageUrls, newImageBlob]); // handle add from file and camera
             setFormData(prevFormData => ({
                 ...prevFormData,
                 imageUrls: [...(prevFormData.imageUrls || []), newImageBlob]
@@ -64,7 +70,6 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
 
     const handleCameraChange = (event) => {
         const fileUploaded = event.target.files[0];
-        event.target.value = '';
         if (fileUploaded) {
             handleFileChange(event);
         }
@@ -138,7 +143,7 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
             <div className="form-group">
                 <label htmlFor="overview">
                     Overview
-                    <button type="button" onClick={() => setIsModalOpen(true)}>
+                    <button className="help-button" type="button" onClick={() => setIsModalOpen(true)}>
                         ?
                     </button>
                 </label>
@@ -220,7 +225,7 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
                         </button>
                     </div>
                 ))}
-                <div className="form-group">
+                <div className="form-group camera-container">
                     <input
                         type="text"
                         placeholder="Image URL"
@@ -240,12 +245,13 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
                     <button type="button" onClick={handleCameraClick}>
                         📸 Choose File
                     </button>
+                    <button type="button" onClick={handleCameraStart}>
+                        📸 Use Camera
+                        </button>
+                    {cameraError && <span className="error-message">{cameraError}</span>}
                 </div>
                 <div className="form-group camera-container">
-                    <div>
-                        <button type="button" onClick={handleCameraStart}>📸 Use Camera</button>
-                        {cameraError && <span className="error-message">{cameraError}</span>}
-                </div>
+                   
                 {cameraStream && (
                     <div className='camera-video'>
                          <video ref={videoRef} autoPlay style={{width:'100%'}}/>
