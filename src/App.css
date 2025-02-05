@@ -148,6 +148,8 @@
   @media (max-width: 768px) {
     .app-container {
       flex-direction: column; /* Stack sidebar and form vertically */
+    }
+    .form-group {
       align-items: stretch; /* Stretch children to full width */
     }
   
@@ -179,4 +181,11 @@
     .diary-form {
         width:100%;
       }
+    .form-group{
+      flex-direction: column;
+      width: 100%;
+    }
+    .form-group label {
+      width:100%;
+    }
   }
