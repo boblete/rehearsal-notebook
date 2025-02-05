@@ -16,6 +16,11 @@ function App() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
+    
+    if(entries == [] || entries === null){
+      return;
+    }
+
     localStorage.setItem('entries', JSON.stringify(entries));
   }, [entries]);
 
@@ -53,6 +58,7 @@ function App() {
       setEditFormData(null);
     } else {
       console.log("Creating new entry");
+      
 
       const newEntryObject = {
         date: new Date().toISOString().split('T')[0],
@@ -68,7 +74,10 @@ function App() {
       console.log("New Entry Object:", newEntryObject);
       setEntries([...entries, newEntryObject]);    
     }
-      
+      setNewEntry("");
+    
+    
+   
       setShowForm(false);
   };
   const [entryToDelete, setEntryToDelete] = useState(null);
@@ -90,7 +99,7 @@ function App() {
       setEntries(entries.filter(entry => entry.timeStamp !== entryToDelete.timeStamp));
       
 
-      console.log('entryToDelete',entryToDelete)
+      console.log('entryToDelete',entryToDelete);
       setSelectedDate(null);
       setEntryToDelete(null);
       setShowDeleteModal(false);
@@ -102,15 +111,20 @@ function App() {
     setEntryToDelete(null);
   };
 
+  const handleCancel = () => {
+    setShowForm(false);
+    setEntryToDelete(null);
+  };
+
   return (    
     <> <div className='top-bar'>
     <h2>Rehearsal Note Diary</h2>
     </div>
       <div className="app-container">
        
-          <div className="entry-area">
-          {showForm && <DiaryForm onSubmit={handleSubmit} initialData={editFormData} />}
-          {!showForm && selectedDate && (
+          <div className="entry-area">           
+          {showForm && <DiaryForm onSubmit={handleSubmit} onCancel={handleCancel} initialData={editFormData} />}
+          {!showForm && selectedDate && ( 
             <div>
                 {entries.filter(e => e.date === selectedDate).map((entry) => (
                 <NotebookEntry
@@ -119,10 +133,7 @@ function App() {
                 onDelete={()=>handleDeleteClick(entry)}
                 onEdit={handleEditClick} /> 
             ))}</div>
-          )}
-       
-          
-    
+          )}          
         </div>
         
          <div className="sidebar">
@@ -132,7 +143,7 @@ function App() {
               <p>Click the plus to start writing today's entry</p>
             
             </div>
-            <button className="add-button" onClick={() => setShowForm(!showForm)}>
+            <button className="add-button" onClick={() => setShowForm(!showForm)}>            
               + Add Entry
             </button>
             
@@ -143,9 +154,7 @@ function App() {
                 key={date}
                 className={selectedDate === date ? 'selected' : ''}
                 onClick={() => handleDateClick(date)}
-              >
-                {date}
-              </li>
+              >{date}</li>
             ))}
           </ul>
         </div>
@@ -163,6 +172,8 @@ function App() {
 }
 
 export default App;
+
+
 
 
 

@@ -20,7 +20,13 @@
   border-radius: 5px;
   min-width:40%;
 }
-
+.help-button{
+  padding: 4px;
+  border-radius: 30px;
+  min-width: 30px;
+  min-height: 30px;
+  margin-left: 5px;
+}
 .read-the-docs {
   color: #888;
 }
@@ -113,9 +119,9 @@
   background-color: #ffcc00; /* Bright yellow background */
   color: black; /* Black text color */
   border: none; /* Remove border */
-  padding: 15px 20px; /* Larger padding */
-  font-size: 1.2em; /* Larger font size */
-  border-radius: 50px; /* Rounded button */
+  padding: 10px 15px; /* Smaller padding */
+  font-size: 1em; /* Smaller font size */
+  border-radius: 25px; /* Less rounded button */
   cursor: pointer; /* Change cursor to pointer */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow for prominence */
   transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover effect */

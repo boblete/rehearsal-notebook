@@ -143,7 +143,7 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
             <div className="form-group">
                 <label htmlFor="overview">
                     Overview
-                    <button type="button" onClick={() => setIsModalOpen(true)}>
+                    <button className="help-button" type="button" onClick={() => setIsModalOpen(true)}>
                         ?
                     </button>
                 </label>
@@ -225,7 +225,7 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
                         </button>
                     </div>
                 ))}
-                <div className="form-group">
+                <div className="form-group camera-container">
                     <input
                         type="text"
                         placeholder="Image URL"
@@ -245,12 +245,13 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
                     <button type="button" onClick={handleCameraClick}>
                         📸 Choose File
                     </button>
+                    <button type="button" onClick={handleCameraStart}>
+                        📸 Use Camera
+                        </button>
+                    {cameraError && <span className="error-message">{cameraError}</span>}
                 </div>
                 <div className="form-group camera-container">
-                    <div>
-                        <button type="button" onClick={handleCameraStart}>📸 Use Camera</button>
-                        {cameraError && <span className="error-message">{cameraError}</span>}
-                </div>
+                   
                 {cameraStream && (
                     <div className='camera-video'>
                          <video ref={videoRef} autoPlay style={{width:'100%'}}/>
