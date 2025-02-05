@@ -8,6 +8,7 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
     const [cameraStream, setCameraStream] = useState(null);
     const [cameraError, setCameraError] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
 
     const videoRef = useRef(null);
     const handleInputChange = (event) => {
@@ -64,7 +65,7 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
     }, [imageUrls]);
 
     const hiddenFileInput = useRef(null);
-    const handleCameraClick = event => {
+    const handleFileClick = event => {
         hiddenFileInput.current.click();
     };
 
@@ -90,8 +91,11 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
     }
 
 
-    const handleCapturePhoto = () => {
-        if (videoRef.current && cameraStream) {
+    const handleCapturePhoto = async() => {
+        if (!isCameraModalOpen){
+            setIsCameraModalOpen(true)
+        } else if (videoRef.current && cameraStream) {
+            setIsCameraModalOpen(false)
             const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
             canvas.width = videoRef.current.videoWidth;
@@ -163,6 +167,28 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
                     <h2>Overview Instructions</h2>
                     <p>Briefly summarize the events of the rehearsal.</p>
                     <p>Note how the director managed the rehearsal and whatever difficulties/successes occurred.</p>
+                    <Modal
+                        isOpen={isCameraModalOpen}
+                        onRequestClose={() => {
+                            stopCamera()
+                            setIsCameraModalOpen(false)
+                        }}
+                        contentLabel="Camera View"
+                        className="modal camera-modal"
+                        overlayClassName="modal-overlay"
+                    >
+                        <h2>Camera View</h2>
+                        <div className='camera-video'>
+                        <video ref={videoRef} autoPlay style={{width:'100%'}}/>
+                        </div>
+                        <button type="button" onClick={() => {
+                            handleCapturePhoto();
+                            }}
+                            >Capture</button>
+                            <button type="button" onClick={() => {stopCamera();setIsCameraModalOpen(false)}}>
+                            Close
+                            </button>
+                    </Modal>
                     <p>Verbalize one main “take-away” lesson from the rehearsal.</p>
                     <p>other suggestions for things one might use in a post include:</p>
                     <ul>
@@ -232,7 +258,6 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
                         value={newImageUrl}
                         onChange={(e) => setNewImageUrl(e.target.value)}
                     />
-
                     <input
                         type="file"
                         ref={hiddenFileInput}
@@ -240,21 +265,20 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
                         style={{ display: 'none' }}
                     />
                     <button type="button" onClick={handleAddImage}>
-                        Add Image
+                       ➕Add Image
                     </button>
-                    <button type="button" onClick={handleCameraClick}>
-                        📸 Choose File
+                    <button type="button" onClick={handleFileClick}>
+                        🖼️ Choose File
                     </button>
                     <button type="button" onClick={handleCameraStart}>
                         📸 Use Camera
-                        </button>
+                    </button>
                     {cameraError && <span className="error-message">{cameraError}</span>}
                 </div>
-                <div className="form-group camera-container">
-                   
+                <div className="form-group camera-container">                   
                 {cameraStream && (
                     <div className='camera-video'>
-                         <video ref={videoRef} autoPlay style={{width:'100%'}}/>
+                         {/* <video ref={videoRef} autoPlay style={{width:'100%'}}/> */}
                         <button type="button" onClick={handleCapturePhoto}>Capture Photo</button> 
                     </div>
                 )}
