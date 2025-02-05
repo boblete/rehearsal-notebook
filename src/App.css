@@ -29,6 +29,7 @@
 .app-container {
   display: flex;
   flex-direction: row-reverse; /* Reverse the direction to put dates on the right */
+  justify-content: space-between;
   width: 100%;
 }.top-bar{
   display: block;
@@ -45,6 +46,7 @@
 
 .sidebar {
   width: 30%; /* Adjust the width as needed */
+  position: relative; /* Needed for absolute positioning of the button */
 }
 
 .notebook-entry {
@@ -140,4 +142,41 @@
   .modal {
     width: 70%;
     font-size: 0.9em;
+  }
+
+  /* Mobile media queries */
+  @media (max-width: 768px) {
+    .app-container {
+      flex-direction: column; /* Stack sidebar and form vertically */
+      align-items: stretch; /* Stretch children to full width */
+    }
+  
+    .sidebar {
+      width: 100%; /* Full width on mobile */
+      margin-bottom: 20px; /* Add some space below the sidebar */
+      /*position: relative; Ensure proper positioning for the collapse button*/
+
+    }
+
+    .entry-area {
+      width: 100%; /* Take full width */
+    }
+  
+    .entries{
+        width: 100%;
+    }
+    .sidebar-collapse-button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background-color: #f0f0f0;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .diary-form {
+        width:100%;
+      }
   }
