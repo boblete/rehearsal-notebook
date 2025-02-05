@@ -5,7 +5,7 @@ import NotebookEntry from './NotebookEntry';
 
 
 function App() {  
-  localStorage.clear();
+  //localStorage.clear();
   const [entries, setEntries] = useState(() => {
     const savedEntries = localStorage.getItem('entries');
     return savedEntries ? JSON.parse(savedEntries) : [];
