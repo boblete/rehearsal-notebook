@@ -157,17 +157,7 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
                     value={formData.overview}
                     onChange={handleInputChange}
                 />
-                <Modal
-                    isOpen={isModalOpen}
-                    onRequestClose={() => setIsModalOpen(false)}
-                    contentLabel="Overview Help"
-                    className="modal"
-                    overlayClassName="modal-overlay"
-                >
-                    <h2>Overview Instructions</h2>
-                    <p>Briefly summarize the events of the rehearsal.</p>
-                    <p>Note how the director managed the rehearsal and whatever difficulties/successes occurred.</p>
-                    <Modal
+                 <Modal
                         isOpen={isCameraModalOpen}
                         onRequestClose={() => {
                             stopCamera()
@@ -189,6 +179,17 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
                             Close
                             </button>
                     </Modal>
+                <Modal
+                    isOpen={isModalOpen}
+                    onRequestClose={() => setIsModalOpen(false)}
+                    contentLabel="Overview Help"
+                    className="modal"
+                    overlayClassName="modal-overlay"
+                >
+                    <h2>Overview Instructions</h2>
+                    <p>Briefly summarize the events of the rehearsal.</p>
+                    <p>Note how the director managed the rehearsal and whatever difficulties/successes occurred.</p>
+                   
                     <p>Verbalize one main “take-away” lesson from the rehearsal.</p>
                     <p>other suggestions for things one might use in a post include:</p>
                     <ul>
