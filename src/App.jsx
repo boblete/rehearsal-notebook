@@ -140,7 +140,7 @@ function App() {
           <div className="date-list-header">
           
              <div className="entry-content">              
-              <p>Click the plus to start writing today's entry</p>
+              <p>Click '+ Add Entry' to start writing today's diary</p>
             
             </div>
             <button className="add-button" onClick={() => setShowForm(!showForm)}>            

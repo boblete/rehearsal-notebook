@@ -75,23 +75,34 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
             handleFileChange(event);
         }
     };
+    const attatchStream = (stream) => {
+        if (videoRef.current) {
+            videoRef.current.srcObject = stream
+            setCameraStream(stream)
+        }else{
+            setTimeout(()=> attatchStream(stream),100)
+        }
+    }
     const handleCameraStart = async () => {
         setCameraError(null);
+      
+        console.log('this wont start because no camera arounnd')
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true })
-            if (videoRef.current) {
-                videoRef.current.srcObject = stream
-                setCameraStream(stream)
-            }
+            setIsCameraModalOpen(true)
+            console.log(stream,videoRef.current)
+            attatchStream(stream)
         } catch (error) {
             setCameraStream(null);
             setCameraError("Could not access camera");
             console.error("Error accessing the camera:", error)
+            setIsCameraModalOpen(false)
         }
     }
 
 
     const handleCapturePhoto = async() => {
+        console.log('capture',isCameraModalOpen)
         if (!isCameraModalOpen){
             setIsCameraModalOpen(true)
         } else if (videoRef.current && cameraStream) {
@@ -157,28 +168,28 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
                     value={formData.overview}
                     onChange={handleInputChange}
                 />
-                 <Modal
-                        isOpen={isCameraModalOpen}
-                        onRequestClose={() => {
-                            stopCamera()
-                            setIsCameraModalOpen(false)
+                <Modal
+                    isOpen={isCameraModalOpen}
+                    onRequestClose={() => {
+                        stopCamera()
+                        setIsCameraModalOpen(false)
+                    }}
+                    contentLabel="Camera View"
+                    className="modal camera-modal"
+                    overlayClassName="modal-overlay"
+                >
+                    <h2>Camera View</h2>
+                    <div className='camera-video'>
+                    <video ref={videoRef} autoPlay style={{width:'100%'}}/>
+                    </div>
+                    <button type="button" onClick={() => {
+                        handleCapturePhoto();
                         }}
-                        contentLabel="Camera View"
-                        className="modal camera-modal"
-                        overlayClassName="modal-overlay"
-                    >
-                        <h2>Camera View</h2>
-                        <div className='camera-video'>
-                        <video ref={videoRef} autoPlay style={{width:'100%'}}/>
-                        </div>
-                        <button type="button" onClick={() => {
-                            handleCapturePhoto();
-                            }}
-                            >Capture</button>
-                            <button type="button" onClick={() => {stopCamera();setIsCameraModalOpen(false)}}>
-                            Close
-                            </button>
-                    </Modal>
+                        >Capture</button>
+                        <button type="button" onClick={() => {stopCamera();setIsCameraModalOpen(false)}}>
+                        Close
+                        </button>
+                </Modal>
                 <Modal
                     isOpen={isModalOpen}
                     onRequestClose={() => setIsModalOpen(false)}
@@ -199,7 +210,9 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
                         <li>Analyze the rehearsal practices of other actors/director/etc whom you look up to</li>
                         <li>List areas in which you did well and areas in which you need to improve, Record questions you may have for the director in the next rehearsal</li>
                     </ul>
-                    <button type="button" onClick={() => setIsModalOpen(false)}>Close</button>                </Modal>
+                    <button type="button" onClick={() => setIsModalOpen(false)}>Close</button>               
+                    
+                 </Modal>
 
             </div>
             <div className="form-group">
