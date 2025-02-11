@@ -74,10 +74,7 @@
   width: 100%;
 }
 
-.entry-area {
-  width: 70%;
-  min-width: 250px;
-}
+
 .entries {
     width: 70%; /* Adjust the width as needed */
     display: flex; /* Add flex display */
@@ -104,6 +101,7 @@
 }
 
 .diary-form {
+  width:100%;
   border: 1px solid #d3d3d3; /* Lighter gray border */
   padding: 10px; /* Optional: Add padding to create some space around the form */
   flex-grow: 1;
@@ -125,8 +123,10 @@
   color: var(--text-color);
   padding-right: 10px; /* Add some spacing between label and input */
 }
-.form-group .input {
+.form-group input {
   text-align: right;
+  color: var(--text-color);
+  background-color: var(--paper-color);
 }
 
 /* Add flex-grow to textareas to allow them to expand */
@@ -134,6 +134,12 @@
   flex-grow: 1; /* Allow the textarea to take up available space */
   min-height: 100px; /* Optional: Set a minimum height for the textareas */
   resize: vertical; /* Optional: Allow the user to resize the textarea vertically */
+  color: var(--text-color);
+  background-color: var(--paper-color);
+}
+.form-group select {
+  flex-grow: 1; /* Allow the textarea to take up available space */
+  color: var(--text-color);
   background-color: var(--paper-color);
 }
 .feedback-container {
@@ -144,10 +150,10 @@
 
 .feedback-box {
   flex: 1; /* Each box takes up equal space */
-  border: 1px solid #ccc; /* Nice border */
+  
   padding: 10px;
   box-sizing: border-box; /* Include padding in width */border-color: var(--border-color);
-  background-color: var(--paper-color);
+
 
 }
 .sidebar .selected {
@@ -212,6 +218,10 @@
   font-size: 0.9em;
   max-height: 90vh;
 }
+.entry-area {
+  min-width: 250px;
+  width: 100%; /* Take full width */
+}
   /* Mobile media queries */
   @media (max-width: 768px) {
     .app-container {
@@ -229,6 +239,7 @@
     }
 
     .entry-area {
+      min-width: 250px;
       width: 100%; /* Take full width */
     }
   
@@ -259,7 +270,7 @@
   }
 
 .theme-toggle-container {
-  position: fixed;
+  position: absolute;
   right:0px;
   top:1px;
   display: inline-block;
@@ -274,7 +285,7 @@
   padding: none;
   display: inline-block;
   font-size: small;
-  position: fixed;
+  position: absolute;
   width: fit-content;
 
 }
