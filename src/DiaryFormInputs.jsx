@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import Modal from 'react-modal'
 
 const DiaryFormInputs = ({ formData, setFormData,weekTitles }) => {
-    const [imageUrls, setImageUrls] = useState([]);
+    const [imageUrls, setImageUrls] = useState(formData.imageUrls || []);
     const [newImageUrl, setNewImageUrl] = useState('');
     const [newImageBlob, setNewImageBlob] = useState(null);
     const [cameraStream, setCameraStream] = useState(null);
