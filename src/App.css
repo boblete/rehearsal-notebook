@@ -64,7 +64,7 @@
 
 .app-container {
   display: flex;
-  flex-direction: row-reverse; /* Reverse the direction to put dates on the right */
+
   justify-content: space-between;
   width: 100%;  
 }
