@@ -48,7 +48,7 @@
   padding: 10px;
   background-color: var(--paper-color);
   border-radius: 5px;
-  min-width:40%;
+  width:100%;
 }
 
 .help-button {
@@ -94,13 +94,13 @@
 }
 
 .entry-date {
-  width: 30%; /* Adjust width as needed */
+  width: 100%; /* Adjust width as needed */
   font-size: 0.8em; /* Adjust the font size as needed */
   text-align: center; /* Center the text */
 }
 
 .entry-content {
-  width: 70%; /* Adjust width as needed */
+  width: 100%; /* Adjust width as needed */
 }
 
 .diary-form {
@@ -149,6 +149,9 @@
   box-sizing: border-box; /* Include padding in width */border-color: var(--border-color);
   background-color: var(--paper-color);
 
+}
+.sidebar .selected {
+  background-color: #2a2a2a;
 }
 
 /* Add diary button styles */

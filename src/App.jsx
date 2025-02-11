@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css'; 
 import DiaryForm from './DiaryForm';
+import DateList from './DateList';
 import NotebookEntry from './NotebookEntry';
 
 
@@ -13,7 +14,14 @@ function App() {
     }
     return window.matchMedia('(prefers-color-scheme: dark)').matches; // Default to system preference
   });
-
+  const weekTitles = ["Week 1:Meeting the play ", 
+                        "Week 2:Building the world of the play", 
+                        "Week 3:Interpreting key scenes and speeches", 
+                        "Week 4:Interpreting key scenes and speeches", 
+                        "Week 5:Key characters and relationships", 
+                        "Week 6:Key characters and relationships",
+                        "Week 7:Over to you", 
+                        "Week 8:Outcomes"]
   useEffect(() => {
     const root = document.documentElement;
     if (isDarkMode) {
@@ -50,9 +58,7 @@ function App() {
   const [selectedDate, setSelectedDate] = useState(null);  
   const [showForm, setShowForm] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-  useEffect(() => {
-    
+  useEffect(() => {    
     if(entries == [] || entries === null){
       return;
     }
@@ -60,10 +66,11 @@ function App() {
     localStorage.setItem('entries', JSON.stringify(entries));
   }, [entries]);
 
-  const handleDateClick = (date) => {
+  
+  const handleDateClick = (date) => { 
     setSelectedDate(date);
-  };
-    const [editFormData, setEditFormData] = useState(null);
+  };  
+  const [editFormData, setEditFormData] = useState(null);
   const handleEditClick = (entry) => {
     setEditFormData({...entry});
     setShowForm(true);
@@ -84,6 +91,7 @@ function App() {
             whatWentWell: formData.whatWentWell,
             whatNeedsImprovement: formData.whatNeedsImprovement,
             imageUrls: formData.imageUrls,
+            week:formData.week,
             timeStamp: editFormData.timeStamp
           };
         }
@@ -168,42 +176,35 @@ function App() {
       </div>
     </div>
       <div className="app-container">
-       
-          <div className="entry-area">           
-          {showForm && <DiaryForm onSubmit={handleSubmit} onCancel={handleCancel} initialData={editFormData} />}
+
+        
+        {!showForm && (<div className="sidebar">
+          <div className="date-list-header">
+            <div className="entry-content">              
+              <p>Click '+ Add Entry' to start writing today's entry</p>
+            
+            </div>
+            <button className="add-button" onClick={() => {setShowForm(!showForm);  setSelectedDate(null);}}>            
+              + Add Entry
+            </button>
+            
+          </div>
+          <DateList dates={getUniqueDates()} selectedDate={selectedDate} onDateClick={handleDateClick} />
+
+        </div>)}
+        <div className="entry-area">           
+          {showForm && <DiaryForm onSubmit={handleSubmit} onCancel={handleCancel} initialData={editFormData} weekTitles={weekTitles}/>}
           {!showForm && selectedDate && ( 
             <div>
                 {entries.filter(e => e.date === selectedDate).map((entry) => (
                 <NotebookEntry
                 key={entry.timeStamp}
                  entry={entry}
+                 weekTitles={weekTitles}
                 onDelete={()=>handleDeleteClick(entry)}
                 onEdit={handleEditClick} /> 
             ))}</div>
           )}          
-        </div>
-        
-         <div className="sidebar">
-          <div className="date-list-header">
-          
-             <div className="entry-content">              
-              <p>Click '+ Add Entry' to start writing today's diary</p>
-            
-            </div>
-            <button className="add-button" onClick={() => setShowForm(!showForm)}>            
-              + Add Entry
-            </button>
-            
-          </div>
-          <ul className="date-list">
-          {getUniqueDates().map(date => (
-              <li
-                key={date}
-                className={selectedDate === date ? 'selected' : ''}
-                onClick={() => handleDateClick(date)}
-              >{date}</li>
-            ))}
-          </ul>
         </div>
         {showDeleteModal && (
           <div className="modal">

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import DiaryFormInputs from './DiaryFormInputs';
   
-const DiaryForm = ({ onSubmit, onCancel, initialData }) => {
+const DiaryForm = ({ onSubmit, onCancel, initialData,weekTitles }) => {
   const [formData, setFormData] = useState(initialData|| {
     overview: '',
     rating: 3,
@@ -35,7 +35,7 @@ const DiaryForm = ({ onSubmit, onCancel, initialData }) => {
 
   return (
     <form onSubmit={handleSubmit} className="diary-form">
-      <DiaryFormInputs formData={formData} setFormData={setFormData} />
+      <DiaryFormInputs formData={formData} setFormData={setFormData} weekTitles={weekTitles}/>
 
       <div className='form-buttons'>
         <button type="submit">Save Entry</button>

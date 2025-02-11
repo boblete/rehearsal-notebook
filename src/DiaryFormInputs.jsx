@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import Modal from 'react-modal'
 
-const DiaryFormInputs = ({ formData, setFormData }) => {
+const DiaryFormInputs = ({ formData, setFormData,weekTitles }) => {
     const [imageUrls, setImageUrls] = useState([]);
     const [newImageUrl, setNewImageUrl] = useState('');
     const [newImageBlob, setNewImageBlob] = useState(null);
@@ -141,10 +141,21 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
             imageUrls: prevFormData.imageUrls.filter((_, i) => i !== index)
         }));
     };
-
+  
   return (
         <>
 
+            <div className="form-group">
+                <label htmlFor="week">Week:</label>
+                <select id="week" name="week" value={formData.week || ''} onChange={handleInputChange}>
+                    <option value="">Select Week</option>
+                    {[...Array(8)].map((_, i) => (
+                        <option key={i + 1} value={i}>
+                            {weekTitles[i]}
+                        </option>
+                    ))}
+                </select>
+            </div>
             <div className="form-group">
                 <label htmlFor="rating">How did it go? (1-5 stars):</label>
                 <select id="rating" name="rating" value={formData.rating} onChange={handleInputChange}>

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { isValid } from 'date-fns'; // Import isValid
-function NotebookEntry({ entry, onDelete, onEdit }) {
+function NotebookEntry({ entry, onDelete, onEdit,weekTitles }) {
   let formattedDate, formattedTime;
   const date = new Date(entry.timeStamp);
  // console.log(entry,date)
@@ -42,6 +42,7 @@ function NotebookEntry({ entry, onDelete, onEdit }) {
             <div className="rating-stars">
             {renderStars()}
             </div>
+            {entry.week && (<p>{weekTitles[entry.week]}</p>)}
             <p>Overview: {entry.overview}</p>
             <p>Attendance Notes: {entry.attendanceNotes}</p>
             <p>Costume/Stage Notes: {entry.costumeStageNotes}</p>
