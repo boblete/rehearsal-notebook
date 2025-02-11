@@ -5,13 +5,49 @@ import NotebookEntry from './NotebookEntry';
 
 
 function App() {  
+  // Theme State and Logic
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      return savedTheme === 'dark';
+    }
+    return window.matchMedia('(prefers-color-scheme: dark)').matches; // Default to system preference
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (isDarkMode) {
+      root.classList.add('dark-mode');
+      root.classList.remove('light-mode');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      root.classList.add('light-mode');
+      root.classList.remove('dark-mode');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDarkMode]);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (event) => {
+      const savedTheme = localStorage.getItem('theme');
+      // Only change if the user hasn't set a preference
+      if (!savedTheme) {
+        setIsDarkMode(event.matches);
+      }
+    };
+    mediaQuery.addEventListener('change', handleChange);
+    // Ensure the correct class is added initially
+    handleChange(mediaQuery);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
   //localStorage.clear();
   const [entries, setEntries] = useState(() => {
     const savedEntries = localStorage.getItem('entries');
     return savedEntries ? JSON.parse(savedEntries) : [];
   }); 
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [newEntry, setNewEntry] = useState('');
+  const [selectedDate, setSelectedDate] = useState(null);  
   const [showForm, setShowForm] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -74,9 +110,7 @@ function App() {
       console.log("New Entry Object:", newEntryObject);
       setEntries([...entries, newEntryObject]);    
     }
-      setNewEntry("");
-    
-    
+          
    
       setShowForm(false);
   };
@@ -117,8 +151,21 @@ function App() {
   };
 
   return (    
-    <> <div className='top-bar'>
-    <h2>Rehearsal Note Diary</h2>
+    <> 
+    <div className='top-bar'>
+      <h2>Rehearsal Note Diary</h2>
+      <div className="theme-toggle-container">
+          <label className="theme-toggle" htmlFor="theme-toggle-input">            
+          <input
+            type="checkbox"
+            id="theme-toggle-input"
+            checked={isDarkMode}
+            onChange={() => setIsDarkMode(!isDarkMode)} />            
+            <span id="theme-toggle-slider" />
+            <div className='dark-light-label'>{isDarkMode?'Dark':'Light'}</div>
+          </label>
+          
+      </div>
     </div>
       <div className="app-container">
        

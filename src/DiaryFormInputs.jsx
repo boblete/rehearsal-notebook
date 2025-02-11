@@ -187,7 +187,7 @@ const DiaryFormInputs = ({ formData, setFormData }) => {
                     overlayClassName="modal-overlay"
                 >
                     <h2>Overview Instructions</h2>
-                    <p>Briefly summarize the events of the rehearsal.</p>
+                    <p>Briefly summarise the events of the rehearsal.</p>
                     <p>Note how the director managed the rehearsal and whatever difficulties/successes occurred.</p>
                    
                     <p>Verbalize one main “take-away” lesson from the rehearsal.</p>

@@ -1,26 +1,57 @@
 #root {
   max-width: 1280px;
   margin: 0 20px;
-  
+
   text-align: left;
 }
+/* Base styles for dark mode */
+:root {
+  --text-color: #f0f0f0;
+  --background-color: #121212;
+  --paper-color: #2a2a2a;
+  --border-color: #555;
+  --shadow-color: rgba(255, 255, 255, 0.1);
+  --button-background-color: #ffcc00;
+  --button-hover-background-color: #ffdd55;
+  --modal-background-color: #121212;
+  --modal-overlay-color: rgba(0, 0, 0, 0.5);
 
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
 
+/* Styles for light mode */
+.light-mode {
+  --text-color: #000;
+  --background-color: #f8f4e8;
+  --paper-color: #fefdf9;
+  --border-color: #e6e0d5;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --button-background-color: #ffcc00;
+  --button-hover-background-color: #ffdd55;
+  --modal-background-color: #f0f0f0;
+  --modal-overlay-color: rgba(0, 0, 0, 0.5);
+
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
 
 .card {
   padding: 3em;
 }
 
 .notebook-entry-container {
-  background-color: #3e3e3a; /* Paper-like background */
-  border: 1px solid #ccc; /* Subtle border */
+  /*background-color: #3e3e3a;  Paper-like background */
+  /*border: 1px solid #ccc;  Subtle border */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
   margin-bottom: 10px;
   padding: 10px;
+  background-color: var(--paper-color);
   border-radius: 5px;
   min-width:40%;
 }
-.help-button{
+
+.help-button {
   padding: 4px;
   border-radius: 30px;
   min-width: 30px;
@@ -30,18 +61,20 @@
 .read-the-docs {
   color: #888;
 }
-/* Add the following CSS rules */
 
 .app-container {
   display: flex;
   flex-direction: row-reverse; /* Reverse the direction to put dates on the right */
   justify-content: space-between;
-  width: 100%;
-}.top-bar{
-  display: block;
-  width:100%;
+  width: 100%;  
 }
-.entry-area{
+
+.top-bar {
+  display: block;
+  width: 100%;
+}
+
+.entry-area {
   width: 70%;
   min-width: 250px;
 }
@@ -73,8 +106,10 @@
 .diary-form {
   border: 1px solid #d3d3d3; /* Lighter gray border */
   padding: 10px; /* Optional: Add padding to create some space around the form */
-    flex-grow: 1;
+  flex-grow: 1;
+  border-color: var(--border-color);
 }
+
 
 /* Styling for form labels and inputs */
 .form-group {
@@ -87,6 +122,7 @@
 .form-group label {
   text-align: left;
   width: 30%; /* Adjust the width as needed */
+  color: var(--text-color);
   padding-right: 10px; /* Add some spacing between label and input */
 }
 .form-group .input {
@@ -95,26 +131,28 @@
 
 /* Add flex-grow to textareas to allow them to expand */
 .form-group textarea {
-    flex-grow: 1; /* Allow the textarea to take up available space */
-    min-height: 100px; /* Optional: Set a minimum height for the textareas */
-    resize: vertical; /* Optional: Allow the user to resize the textarea vertically */
+  flex-grow: 1; /* Allow the textarea to take up available space */
+  min-height: 100px; /* Optional: Set a minimum height for the textareas */
+  resize: vertical; /* Optional: Allow the user to resize the textarea vertically */
+  background-color: var(--paper-color);
 }
-.feedback-container{
-    display: flex;
-    width: 100%;
-    gap: 10px; /* Space between the boxes */
+.feedback-container {
+  display: flex;
+  width: 100%;
+  gap: 10px; /* Space between the boxes */
 }
 
 .feedback-box {
   flex: 1; /* Each box takes up equal space */
   border: 1px solid #ccc; /* Nice border */
   padding: 10px;
-  box-sizing: border-box; /* Include padding in width */
-  
-  
+  box-sizing: border-box; /* Include padding in width */border-color: var(--border-color);
+  background-color: var(--paper-color);
+
 }
 
 /* Add diary button styles */
+
 .add-diary-entry-button {
   background-color: #ffcc00; /* Bright yellow background */
   color: black; /* Black text color */
@@ -125,18 +163,18 @@
   cursor: pointer; /* Change cursor to pointer */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow for prominence */
   transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover effect */
-    display: flex;
+  display: flex;
   align-items: center;
   justify-content: center;
 }
-
-
-
 
 .add-diary-entry-button:hover {
   background-color: #ffdd55; /* Slightly lighter yellow on hover */
   transform: scale(1.05); /* Slight scale up on hover */
 }
+
+.add-diary-entry-button,
+
 .modal {
   position: fixed;
   top: 50%;
@@ -146,6 +184,7 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: var(--modal-background-color);
   z-index: 1050; /* Higher z-index to ensure it's on top */
 }
 
@@ -161,14 +200,15 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--modal-overlay-color);
   z-index: 1040;
 }
-  .modal {
-    width: 70%;
-    font-size: 0.9em;max-height: 90vh;
-  }
 
+.modal {
+  width: 70%;
+  font-size: 0.9em;
+  max-height: 90vh;
+}
   /* Mobile media queries */
   @media (max-width: 768px) {
     .app-container {
@@ -176,7 +216,7 @@
     }
     .form-group {
       align-items: stretch; /* Stretch children to full width */
-    }
+  }
   
     .sidebar {
       width: 100%; /* Full width on mobile */
@@ -190,27 +230,92 @@
     }
   
     .entries{
-        width: 100%;
-    }
+      width: 100%;
+  }
     .sidebar-collapse-button {
-      position: absolute;
-      top: 0;
-      right: 0;
-      background-color: #f0f0f0;
-      border: none;
-      padding: 10px;
-      cursor: pointer;
-      border-radius: 5px;
-    }
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #f0f0f0;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
 
     .diary-form {
-        width:100%;
-      }
+      width: 100%;
+    }
     .form-group{
       flex-direction: column;
       width: 100%;
     }
     .form-group label {
-      width:100%;
-    }
+      width: 100%;
+  }
+  }
+
+.theme-toggle-container {
+  position: fixed;
+  right:0px;
+  top:1px;
+  display: inline-block;
+  width: 100px; /* Adjust width */
+  height: 20px; /* Adjust height */
+
+
+}
+.theme-toggle-container label{padding:0;}
+.dark-light-label{
+  margin: 2px;
+  padding: none;
+  display: inline-block;
+  font-size: small;
+  position: fixed;
+  width: fit-content;
+
+}
+/* Hide the default checkbox */
+.theme-toggle-container input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* Style the span that acts as the slider */
+  .theme-toggle-container span {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    background-color: var(--secondary-color); /* Off state color */
+    border-radius: 30px;
+    width: 40px;
+    height: 20px;
+    transition: background-color 0.4s;
+  }
+  
+  /* Style the circle inside the span */
+  .theme-toggle-container span:after {
+    position: absolute;
+    content: "";
+    left: 3px;
+    top: 3px;
+    height: 14px;
+    width: 14px;
+    border-radius: 50%;
+    background-color: #ffffff; /* Circle color */
+    transition: transform 0.4s;
+  }
+  .theme-toggle-container input:checked + span:after {
+    background-color: #000000; /* Circle color */
+  }
+  /* Change the background color when the checkbox is checked */
+  .theme-toggle-container input:checked + span {
+    background-color: var(--primary-color); /* On state color */
+  }
+  
+  /* Move the circle to the right when checked */
+  .theme-toggle-container input:checked + span:after {
+    transform: translateX(20px);
   }
