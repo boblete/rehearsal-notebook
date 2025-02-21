@@ -31,10 +31,14 @@ function NotebookEntry({ entry, onDelete, onEdit,weekTitles }) {
     } 
     return stars;
   };
+  const entryClass = entry.userType === 'Teacher' ? 'teacher-entry' : 'student-entry';
   return (
-    <div className="notebook-entry-container">
+    <div className={`notebook-entry-container ${entryClass}`}>
        <div className="entry-date">
-        <p>{formattedDate} {formattedTime}</p>        
+        <p>{formattedDate} {formattedTime}</p>
+        <div className="user-id">
+        <p>User: {entry.userId}</p>
+        </div>        
       </div>
       <div className="notebook-entry">
           <div className="entry-content">

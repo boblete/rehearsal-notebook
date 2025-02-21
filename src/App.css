@@ -20,6 +20,8 @@
   background-color: var(--background-color);
 }
 
+
+
 /* Styles for light mode */
 .light-mode {
   --text-color: #000;
@@ -35,6 +37,21 @@
   color: var(--text-color);
   background-color: var(--background-color);
 }
+
+
+ul{
+  list-style-type: none;
+  padding-left: 0px;
+
+}
+.student-entry {
+  border: 2px solid green; /* Green border for students */
+}
+
+.teacher-entry {
+  border: 2px solid blue; /* Blue border for teachers */
+}
+
 
 .card {
   padding: 3em;

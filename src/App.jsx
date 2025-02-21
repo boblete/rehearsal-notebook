@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css'; 
 import DiaryForm from './DiaryForm';
-import DateList from './DateList';
 import NotebookEntry from './NotebookEntry';
-
 
 function App() {  
   // Theme State and Logic
@@ -14,7 +12,30 @@ function App() {
     }
     return window.matchMedia('(prefers-color-scheme: dark)').matches; // Default to system preference
   });
-  const weekTitles = ["Week 1:Meeting the play ", 
+  // User ID State and Logic
+  const [userId, setUserId] = useState(null);
+  // User Type State and Logic
+  const [userType, setUserType] = useState('Student'); // Default to 'Student'
+    const initializeUserType = () => {
+      const storedUserType = localStorage.getItem('userType');
+      if (storedUserType) {
+        setUserType(storedUserType);
+      } else if(!storedUserType){
+      } else {
+        localStorage.setItem('userType', 'Student');
+      }
+    };
+    const initializeUserId = () => {
+      const storedUserId = localStorage.getItem('userId');
+      if (storedUserId) {
+        setUserId(storedUserId);
+      } else {
+        const newUserId = 'A New User';
+        localStorage.setItem('userId', newUserId);
+        setUserId(newUserId);
+      }
+    };
+    const weekTitles = ["Week 1:Meeting the play ", 
                         "Week 2:Building the world of the play", 
                         "Week 3:Interpreting key scenes and speeches", 
                         "Week 4:Interpreting key scenes and speeches", 
@@ -50,28 +71,39 @@ function App() {
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
+    useEffect(() => {
+      initializeUserId();
+    }, []);
+
+    useEffect(() => {
+      initializeUserType();
+    }, []);
   //localStorage.clear();
   const [entries, setEntries] = useState(() => {
     const savedEntries = localStorage.getItem('entries');
     return savedEntries ? JSON.parse(savedEntries) : [];
   }); 
-  const [selectedDate, setSelectedDate] = useState(null);  
+  
+  const [selectedWeek, setSelectedWeek] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+
   const [showForm, setShowForm] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  useEffect(() => {    
+  useEffect(() => {
     if(entries == [] || entries === null){
       return;
     }
 
     localStorage.setItem('entries', JSON.stringify(entries));
   }, [entries]);
-
-  
-  const handleDateClick = (date) => { 
-    setSelectedDate(date);
-  };  
+  const handleWeekClick = (week) => {
+    setSelectedDate(null)
+    setSelectedWeek(week);
+  };
   const [editFormData, setEditFormData] = useState(null);
   const handleEditClick = (entry) => {
+
+    console.log(entry)
     setEditFormData({...entry});
     setShowForm(true);
   };
@@ -83,6 +115,8 @@ function App() {
       const updatedEntries = entries.map((e) => {
         if (e.timeStamp === editFormData.timeStamp) {
           return {
+            userId: userId,
+            userType: userType,
             date: editFormData.date,
             overview: formData.overview,
             rating: formData.rating,
@@ -92,7 +126,7 @@ function App() {
             whatNeedsImprovement: formData.whatNeedsImprovement,
             imageUrls: formData.imageUrls,
             week:formData.week,
-            timeStamp: editFormData.timeStamp
+            timeStamp: editFormData.timeStamp,
           };
         }
         return e;
@@ -112,21 +146,27 @@ function App() {
         attendanceNotes: formData.attendanceNotes,
         imageUrls: formData.imageUrls,
         costumeStageNotes: formData.costumeStageNotes,
+        week:formData.week,
         whatWentWell: formData.whatWentWell,
+        userId: userId,
+        userType: userType,
         whatNeedsImprovement: formData.whatNeedsImprovement
       };
       console.log("New Entry Object:", newEntryObject);
       setEntries([...entries, newEntryObject]);    
-    }
+    }    
           
    
       setShowForm(false);
   };
   const [entryToDelete, setEntryToDelete] = useState(null);
+  const getUniqueWeeks = () => {
+    const uniqueWeeks = [...new Set(entries.map(entry => entry.week))];
+    return uniqueWeeks.sort((a, b) => {
 
-  const getUniqueDates = () => {
-    const uniqueDates = [...new Set(entries.map(entry => entry.date))];
-    return uniqueDates.sort().reverse();
+   
+        return a - b;
+      });
   };
 
   const handleDeleteClick = (entry) => {
@@ -142,7 +182,7 @@ function App() {
       
 
       console.log('entryToDelete',entryToDelete);
-      setSelectedDate(null);
+      setSelectedWeek(null);
       setEntryToDelete(null);
       setShowDeleteModal(false);
     }
@@ -182,30 +222,43 @@ function App() {
           <div className="date-list-header">
             <div className="entry-content">              
               <p>Click '+ Add Entry' to start writing today's entry</p>
-            
+
             </div>
-            <button className="add-button" onClick={() => {setShowForm(!showForm);  setSelectedDate(null);}}>            
+            <button className="add-button" onClick={() => {setShowForm(!showForm);  setSelectedWeek(null);}}>
               + Add Entry
             </button>
             
           </div>
-          <DateList dates={getUniqueDates()} selectedDate={selectedDate} onDateClick={handleDateClick} />
+          <ul>
+              {getUniqueWeeks().map((date) => (
+                <li
+                  key={date}
+                  onClick={() => handleWeekClick(date)}
+                  className={date === selectedDate ? 'selected' : ''}
+                >
 
+                  {date && weekTitles[date]}
+      
+                </li>
+              ))}
+            </ul>
         </div>)}
         <div className="entry-area">           
           {showForm && <DiaryForm onSubmit={handleSubmit} onCancel={handleCancel} initialData={editFormData} weekTitles={weekTitles}/>}
-          {!showForm && selectedDate && ( 
+   
+          {!showForm && selectedWeek && (
             <div>
-                {entries.filter(e => e.date === selectedDate).map((entry) => (
+              {entries.filter(e => e.week === selectedWeek).map((entry,i) => (
                 <NotebookEntry
-                key={entry.timeStamp}
-                 entry={entry}
-                 weekTitles={weekTitles}
-                onDelete={()=>handleDeleteClick(entry)}
-                onEdit={handleEditClick} /> 
-            ))}</div>
-          )}          
-        </div>
+                  key={`${entry.week}_${i}`}
+                  entry={entry}
+                  weekTitles={weekTitles}
+                  onDelete={() => handleDeleteClick(entry)}
+                  onEdit={handleEditClick}
+                />
+              ))}
+            </div>
+          )}        </div>
         {showDeleteModal && (
           <div className="modal">
             <div className="modal-content">

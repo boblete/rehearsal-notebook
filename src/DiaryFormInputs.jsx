@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react'
 import Modal from 'react-modal'
+import './App.css';
+const DiaryFormInputs = ({ formData, setFormData, weekTitles, weekError }) => {
 
-const DiaryFormInputs = ({ formData, setFormData,weekTitles }) => {
     const [imageUrls, setImageUrls] = useState(formData.imageUrls || []);
     const [newImageUrl, setNewImageUrl] = useState('');
     const [newImageBlob, setNewImageBlob] = useState(null);
@@ -12,6 +13,7 @@ const DiaryFormInputs = ({ formData, setFormData,weekTitles }) => {
 
     const videoRef = useRef(null);
     const handleInputChange = (event) => {
+        console.log('changed')
 
         const { name, value } = event.target;
         setFormData((prevFormData) => ({
@@ -145,16 +147,23 @@ const DiaryFormInputs = ({ formData, setFormData,weekTitles }) => {
   return (
         <>
 
-            <div className="form-group">
-                <label htmlFor="week">Week:</label>
-                <select id="week" name="week" value={formData.week || ''} onChange={handleInputChange}>
-                    <option value="">Select Week</option>
-                    {[...Array(8)].map((_, i) => (
-                        <option key={i + 1} value={i}>
-                            {weekTitles[i]}
-                        </option>
-                    ))}
-                </select>
+            <div className="form-group" style={{display: 'flex', alignItems: 'center'}}>
+              <label htmlFor="week">Week:</label>
+              <select
+                className={weekError ? 'error' : ''}
+                id="week"
+                name="week"
+                value={formData.week || ''}
+                onChange={handleInputChange}
+              >
+                <option value="">Select Week</option>
+                {weekTitles && [...Array(8)].map((_, i) => (
+                  <option key={i + 1} value={i}>
+                    {weekTitles[i]}
+                  </option>
+                ))}
+              </select>
+              {weekError && <span className="error-message" style={{ color: 'red', marginLeft: '10px' }}>Please select a week.</span>}
             </div>
             <div className="form-group">
                 <label htmlFor="rating">How did it go? (1-5 stars):</label>
