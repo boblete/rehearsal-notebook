@@ -90,6 +90,7 @@ function App() {
   const [selectedDate, setSelectedDate] = useState(null);
   // Sort State and Logic
   const [sortDirection, setSortDirection] = useState('asc');
+  const [activeSort, setActiveSort] = useState(null);
 
 
   const [showForm, setShowForm] = useState(false);
@@ -208,9 +209,21 @@ function App() {
     setShowForm(false);
     setEntryToDelete(null);
   };
-  const handleSortToggle = () => {
+  const handleSortByWeekToggle = () => {
+    setActiveSort('week');
     setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
   };
+    // Sort by Created Date State and Logic
+  const [sortByDateDirection, setSortByDateDirection] = useState('asc'); // Default to ascending
+  const handleSortByDateToggle = () => {
+      setActiveSort('date');
+
+    
+    setSortByDateDirection(sortByDateDirection === 'asc' ? 'desc' : 'asc')
+
+  }
+ // const handleSortByDateToggle = () => setSortByDateDirection(sortByDateDirection === 'asc' ? 'desc' : 'asc');
+
 
   const sortedEntries = [...entries].sort((a, b) => {
     const weekA = a.week;
@@ -221,6 +234,17 @@ function App() {
     } else {
       return weekB - weekA;
     }
+  }).sort((a, b) => {
+    // Sort by timestamp (date created)
+    const dateA = a.timeStamp;
+    const dateB = b.timeStamp;
+
+    if (sortByDateDirection === 'asc') {
+      return dateA - dateB; // Ascending order (oldest first)
+    } else {
+      return dateB - dateA; // Descending order (newest first)
+    }
+  
   });
 
   return (    
@@ -255,9 +279,13 @@ function App() {
 
           </div>
             <div className="sort-button-container">
-                <button onClick={handleSortToggle}>
-                    Sort by Week ({sortDirection === 'asc' ? 'Ascending' : 'Descending'})
+            <h5>Sort</h5>
+                <button onClick={handleSortByWeekToggle}
+                  className={activeSort === 'week' ? 'selected' : ''}>Sort by Week ({sortDirection === 'asc' ? 'Ascending' : 'Descending'})
                 </button>
+                    <button onClick={handleSortByDateToggle}                  
+                      className={activeSort === 'date' ? 'selected' : ''}>Sort by Date Created ({sortByDateDirection === 'asc' ? 'Ascending' : 'Descending'})
+                    </button>
             </div>
               <h5>Filters</h5>
               {getUniqueWeeks().map((date) => (

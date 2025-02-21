@@ -57,7 +57,9 @@ ul{
 .card {
   padding: 3em;
 }
-
+.selected{
+  border:1px solid #ffcc00 ;
+}
 .notebook-entry-container {
   /*background-color: #3e3e3a;  Paper-like background */
   /*border: 1px solid #ccc;  Subtle border */
