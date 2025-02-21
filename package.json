@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@alwaysmeticulous/recorder-loader": "^2.201.0",
     "@fortawesome/free-solid-svg-icons": "^6.5.3",
     "@fortawesome/react-fontawesome": "",
     "date-fns": "^3.0.6",
