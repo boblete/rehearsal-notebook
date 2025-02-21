@@ -18,6 +18,8 @@ function App() {
   const [userType, setUserType] = useState('Student'); // Default to 'Student'
     const initializeUserType = () => {
       const storedUserType = localStorage.getItem('userType');
+      if (storedUserType === null || storedUserType === undefined)
+      {localStorage.setItem('userType', 'Student')}
       if (storedUserType) {
         setUserType(storedUserType);
       } else if(!storedUserType){
@@ -86,6 +88,9 @@ function App() {
   
   const [selectedWeeks, setSelectedWeeks] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
+  // Sort State and Logic
+  const [sortDirection, setSortDirection] = useState('asc');
+
 
   const [showForm, setShowForm] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -104,7 +109,6 @@ function App() {
     } else {
         setSelectedWeeks([...selectedWeeks, week]);
     }
-
     
   };
   const [editFormData, setEditFormData] = useState(null);
@@ -204,6 +208,20 @@ function App() {
     setShowForm(false);
     setEntryToDelete(null);
   };
+  const handleSortToggle = () => {
+    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+  };
+
+  const sortedEntries = [...entries].sort((a, b) => {
+    const weekA = a.week;
+    const weekB = b.week;
+
+    if (sortDirection === 'asc') {
+      return weekA - weekB;
+    } else {
+      return weekB - weekA;
+    }
+  });
 
   return (    
     <> 
@@ -236,10 +254,15 @@ function App() {
             </button>
 
           </div>
+            <div className="sort-button-container">
+                <button onClick={handleSortToggle}>
+                    Sort by Week ({sortDirection === 'asc' ? 'Ascending' : 'Descending'})
+                </button>
+            </div>
               <h5>Filters</h5>
               {getUniqueWeeks().map((date) => (
                 <div
-                  key={date}
+                  key={"unique_week_"+date}
                   onClick={() => handleWeekClick(date)}
                   className={`week-chip ${selectedWeeks.includes(date) ? 'selected-week' : 'normal-week'} ${date === selectedDate ? 'selected' : ''}`}
                 >
@@ -259,12 +282,12 @@ function App() {
             <div>
                 {
                   (selectedWeeks.length > 0 ? (
-                    entries.filter(e => selectedWeeks.includes(e.week))
+                    sortedEntries.filter(e => selectedWeeks.includes(e.week))
                   ) : (
-                    entries
+                    sortedEntries
                   )).map((entry,i) => (
                     <NotebookEntry
-                      key={`${entry.week}_${i}`}
+                      key={`${entry.week}_${i}_${entry.timeStamp}`}
                       entry={entry}
                       weekTitles={weekTitles}
                       onDelete={() => handleDeleteClick(entry)}
