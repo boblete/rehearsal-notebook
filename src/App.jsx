@@ -84,7 +84,7 @@ function App() {
     return savedEntries ? JSON.parse(savedEntries) : [];
   }); 
   
-  const [selectedWeek, setSelectedWeek] = useState(null);
+  const [selectedWeeks, setSelectedWeeks] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
 
   const [showForm, setShowForm] = useState(false);
@@ -96,9 +96,16 @@ function App() {
 
     localStorage.setItem('entries', JSON.stringify(entries));
   }, [entries]);
+
   const handleWeekClick = (week) => {
-    setSelectedDate(null)
-    setSelectedWeek(week);
+    setSelectedDate(null);
+    if (selectedWeeks.includes(week)) {
+        setSelectedWeeks(selectedWeeks.filter(w => w !== week));
+    } else {
+        setSelectedWeeks([...selectedWeeks, week]);
+    }
+
+    
   };
   const [editFormData, setEditFormData] = useState(null);
   const handleEditClick = (entry) => {
@@ -182,7 +189,7 @@ function App() {
       
 
       console.log('entryToDelete',entryToDelete);
-      setSelectedWeek(null);
+      setSelectedWeeks([]);
       setEntryToDelete(null);
       setShowDeleteModal(false);
     }
@@ -224,40 +231,51 @@ function App() {
               <p>Click '+ Add Entry' to start writing today's entry</p>
 
             </div>
-            <button className="add-button" onClick={() => {setShowForm(!showForm);  setSelectedWeek(null);}}>
+            <button className="add-button" onClick={() => {setShowForm(!showForm);  setSelectedWeeks(null);}}>
               + Add Entry
             </button>
-            
+
           </div>
-          <ul>
+              <h5>Filters</h5>
               {getUniqueWeeks().map((date) => (
-                <li
+                <div
                   key={date}
                   onClick={() => handleWeekClick(date)}
-                  className={date === selectedDate ? 'selected' : ''}
+                  className={`week-chip ${selectedWeeks.includes(date) ? 'selected-week' : 'normal-week'} ${date === selectedDate ? 'selected' : ''}`}
                 >
 
+                  
+
                   {date && weekTitles[date]}
-      
-                </li>
+
+                </div>
               ))}
-            </ul>
+            
         </div>)}
-        <div className="entry-area">           
+        <div className="entry-area">
           {showForm && <DiaryForm onSubmit={handleSubmit} onCancel={handleCancel} initialData={editFormData} weekTitles={weekTitles}/>}
-   
-          {!showForm && selectedWeek && (
+
+          {!showForm && (
             <div>
-              {entries.filter(e => e.week === selectedWeek).map((entry,i) => (
-                <NotebookEntry
-                  key={`${entry.week}_${i}`}
-                  entry={entry}
-                  weekTitles={weekTitles}
-                  onDelete={() => handleDeleteClick(entry)}
-                  onEdit={handleEditClick}
-                />
-              ))}
+                {
+                  (selectedWeeks.length > 0 ? (
+                    entries.filter(e => selectedWeeks.includes(e.week))
+                  ) : (
+                    entries
+                  )).map((entry,i) => (
+                    <NotebookEntry
+                      key={`${entry.week}_${i}`}
+                      entry={entry}
+                      weekTitles={weekTitles}
+                      onDelete={() => handleDeleteClick(entry)}
+                      onEdit={handleEditClick}
+                    />
+                  ))}
+            
+              
+
             </div>
+
           )}        </div>
         {showDeleteModal && (
           <div className="modal">
