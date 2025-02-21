@@ -231,7 +231,7 @@ function App() {
               <p>Click '+ Add Entry' to start writing today's entry</p>
 
             </div>
-            <button className="add-button" onClick={() => {setShowForm(!showForm);  setSelectedWeeks(null);}}>
+            <button className="add-button" onClick={() => {setShowForm(!showForm);  setSelectedWeeks([]);}}>
               + Add Entry
             </button>
 
