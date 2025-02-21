@@ -66,7 +66,7 @@ jobs:
         # by the time the Meticulous tests start
         run: |
           vite serve &
-          sleep 5
+          sleep 30
 
       - name: Run Meticulous tests
         uses: alwaysmeticulous/report-diffs-action/cloud-compute@v1
