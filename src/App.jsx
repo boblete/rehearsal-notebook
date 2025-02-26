@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import './App.css'; 
 import DiaryForm from './DiaryForm';
 import NotebookEntry from './NotebookEntry';
+import HomeworkQuestionForm from './HomeworkQuestionForm'; // Import the new forms
+import CharacterFlashcardForm from './CharacterFlashcardForm';
+import QuoteFlashcardForm from './QuoteFlashcardForm';
+import EntryTypeGrid from './EntryTypeGrid'; // Import the new component
 
 function App() {  
   // Theme State and Logic
@@ -93,7 +97,10 @@ function App() {
   const [activeSort, setActiveSort] = useState(null);
 
 
-  const [showForm, setShowForm] = useState(false);
+  const [showDiaryForm, setShowDiaryForm] = useState(false); //rename to show diary form
+  const [showHomeworkQuestionForm, setShowHomeworkQuestionForm] = useState(false);
+  const [showCharacterFlashcardForm, setShowCharacterFlashcardForm] = useState(false);
+  const [showQuoteFlashcardForm, setShowQuoteFlashcardForm] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   useEffect(() => {
     if(entries == [] || entries === null){
@@ -116,8 +123,8 @@ function App() {
   const handleEditClick = (entry) => {
 
     console.log(entry)
-    setEditFormData({...entry});
-    setShowForm(true);
+    setEditFormData({...entry, entryType: "Diary Entry"});
+    setShowDiaryForm(true);
   };
 
   const handleSubmit = (formData) => {
@@ -162,14 +169,14 @@ function App() {
         whatWentWell: formData.whatWentWell,
         userId: userId,
         userType: userType,
+        entryType:"Diary Entry",
         whatNeedsImprovement: formData.whatNeedsImprovement
       };
       console.log("New Entry Object:", newEntryObject);
       setEntries([...entries, newEntryObject]);    
     }    
           
-   
-      setShowForm(false);
+    setShowDiaryForm(false);
   };
   const [entryToDelete, setEntryToDelete] = useState(null);
   const getUniqueWeeks = () => {
@@ -206,7 +213,10 @@ function App() {
   };
 
   const handleCancel = () => {
-    setShowForm(false);
+    setShowDiaryForm(false);
+    setShowHomeworkQuestionForm(false);
+    setShowCharacterFlashcardForm(false);
+    setShowQuoteFlashcardForm(false);
     setEntryToDelete(null);
   };
   const handleSortByWeekToggle = () => {
@@ -247,33 +257,95 @@ function App() {
   
   });
 
-  return (    
-    <> 
+  const [showEntryTypeGrid, setShowEntryTypeGrid] = useState(false);
+  const handleAddEntryClick = () => {
+    setShowEntryTypeGrid(true);
+    setSelectedWeeks([]);
+  };
+
+  const handleEntryTypeSelect = (entryType) => {
+    setShowEntryTypeGrid(false);
+    if (entryType === "Diary Entry") {
+      setShowDiaryForm(true);
+    } else if (entryType === "Homework Question") {
+      setShowHomeworkQuestionForm(true);
+    } else if (entryType === "Character Flashcard") {
+      setShowCharacterFlashcardForm(true);
+    } else if (entryType === "Quote Flashcard") {
+      setShowQuoteFlashcardForm(true);
+    }
+  };
+
+  const handleHomeworkSubmit = (formData) => {
+    const newEntry = {
+      entryType: "Homework Question",
+      timeStamp: Date.now(),
+      question: formData.question,
+      answer: formData.answer,
+      userId: userId,
+      userType: userType,
+    };
+    setEntries([...entries, newEntry]);
+    setShowHomeworkQuestionForm(false);
+  };
+
+  const handleCharacterFlashcardSubmit = (formData) => {
+    const newEntry = {
+      entryType: "Character Flashcard",
+      timeStamp: Date.now(),
+      characterName: formData.characterName,
+      notes: formData.notes,
+      userId: userId,
+      userType: userType,
+    };
+    setEntries([...entries, newEntry]);
+    setShowCharacterFlashcardForm(false);
+  };
+
+  const handleQuoteFlashcardSubmit = (formData) => {
+    const newEntry = {
+      entryType: "Quote Flashcard",
+      timeStamp: Date.now(),
+      quote: formData.quote,
+      source: formData.source,
+      notes: formData.notes,
+      userId: userId,
+      userType: userType,
+    };
+    setEntries([...entries, newEntry]);
+    setShowQuoteFlashcardForm(false);
+  };
+
+  return (<>
+
     <div className='top-bar'>
       <h2>Rehearsal Note Diary</h2>
       <div className="theme-toggle-container">
-          <label className="theme-toggle" htmlFor="theme-toggle-input">            
-          <input
-            type="checkbox"
-            id="theme-toggle-input"
-            checked={isDarkMode}
-            onChange={() => setIsDarkMode(!isDarkMode)} />            
-            <span id="theme-toggle-slider" />
-            <div className='dark-light-label'>{isDarkMode?'Dark':'Light'}</div>
-          </label>
-          
+        <label className="theme-toggle" htmlFor="theme-toggle-input">            
+        <input
+          type="checkbox"
+          id="theme-toggle-input"
+          checked={isDarkMode}
+          onChange={() => setIsDarkMode(!isDarkMode)} />            
+          <span id="theme-toggle-slider" />
+          <div className='dark-light-label'>{isDarkMode?'Dark':'Light'}</div>
+        </label>          
       </div>
     </div>
-      <div className="app-container">
+    <div className="app-container">
 
-        
-        {!showForm && (<div className="sidebar">
+      
+      {!showDiaryForm && !showHomeworkQuestionForm 
+        && !showCharacterFlashcardForm 
+        && !showQuoteFlashcardForm 
+        && (<div className="sidebar">
+        {!showEntryTypeGrid && (<>
           <div className="date-list-header">
             <div className="entry-content">              
               <p>Click '+ Add Entry' to start writing today's entry</p>
 
             </div>
-            <button className="add-button" onClick={() => {setShowForm(!showForm);  setSelectedWeeks([]);}}>
+            <button className="add-button" onClick={handleAddEntryClick}>
               + Add Entry
             </button>
 
@@ -287,7 +359,7 @@ function App() {
                       className={activeSort === 'date' ? 'selected' : ''}>Sort by Date Created ({sortByDateDirection === 'asc' ? 'Ascending' : 'Descending'})
                     </button>
             </div>
-              <h5>Filters</h5>
+            <h5>Filters</h5>
               {getUniqueWeeks().map((date) => (
                 <div
                   key={"unique_week_"+date}
@@ -301,12 +373,17 @@ function App() {
 
                 </div>
               ))}
-            
+         
+          </>)}
         </div>)}
         <div className="entry-area">
-          {showForm && <DiaryForm onSubmit={handleSubmit} onCancel={handleCancel} initialData={editFormData} weekTitles={weekTitles}/>}
+          {showDiaryForm && <DiaryForm onSubmit={handleSubmit} onCancel={handleCancel} initialData={editFormData} weekTitles={weekTitles}/>}
+          {showHomeworkQuestionForm && <HomeworkQuestionForm onSubmit={handleHomeworkSubmit} onCancel={handleCancel} />}
+          {showCharacterFlashcardForm && <CharacterFlashcardForm onSubmit={handleCharacterFlashcardSubmit} onCancel={handleCancel} />}
+          {showQuoteFlashcardForm && <QuoteFlashcardForm onSubmit={handleQuoteFlashcardSubmit} onCancel={handleCancel} />}
+          {showEntryTypeGrid && <EntryTypeGrid onEntryTypeSelect={handleEntryTypeSelect} />}
 
-          {!showForm && (
+          {!showDiaryForm && !showHomeworkQuestionForm && !showCharacterFlashcardForm && !showQuoteFlashcardForm && (
             <div>
                 {
                   (selectedWeeks.length > 0 ? (
@@ -327,7 +404,9 @@ function App() {
 
             </div>
 
-          )}        </div>
+          )}       
+          
+        </div>
         {showDeleteModal && (
           <div className="modal">
             <div className="modal-content">
@@ -335,13 +414,16 @@ function App() {
               <button onClick={handleDeleteConfirm}>Delete</button>
               <button onClick={handleDeleteCancel}>Cancel</button>
             </div>
-          </div>)}
+          </div>)
+          
+          }
       </div>
-    </>
-  )
+
+    </>)
 }
 
 export default App;
+
 
 
 
