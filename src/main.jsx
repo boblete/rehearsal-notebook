@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.jsx';
 import Modal from 'react-modal';
-import { tryLoadAndStartRecorder } from '@alwaysmeticulous/recorder-loader'
+//import { tryLoadAndStartRecorder } from '@alwaysmeticulous/recorder-loader'
 
 Modal.setAppElement('#root');
 
@@ -17,10 +17,12 @@ async function startApp() {
   if (!isProduction()) {
     // Start the Meticulous recorder before you initialise your app.
     // Note: all errors are caught and logged, so no need to surround with try/catch
+    /*
     await tryLoadAndStartRecorder({
       recordingToken: 'sxCvj1AUekWagHms64xGqgfBxdevZw345VcCa3HY',
       isProduction: false,
     });
+    */
   }
 
   // Initalise app after the Meticulous recorder is ready, e.g.
