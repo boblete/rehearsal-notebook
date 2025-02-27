@@ -19,7 +19,7 @@ async function startApp() {
     // Note: all errors are caught and logged, so no need to surround with try/catch
     /*
     await tryLoadAndStartRecorder({
-      recordingToken: 'sxCvj1AUekWagHms64xGqgfBxdevZw345VcCa3HY',
+      recordingToken: 
       isProduction: false,
     });
     */
