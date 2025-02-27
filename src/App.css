@@ -16,6 +16,7 @@
   --modal-background-color: #121212;
   --modal-overlay-color: rgba(0, 0, 0, 0.5);
 
+
   color: var(--text-color);
   background-color: var(--background-color);
 }
@@ -34,13 +35,13 @@
   --modal-background-color: #f0f0f0;
   --modal-overlay-color: rgba(0, 0, 0, 0.5);
 
+
   color: var(--text-color);
   background-color: var(--background-color);
 }
 
 
 ul{
-  list-style-type: none;
   padding-left: 0px;
 
 }
@@ -56,7 +57,9 @@ ul{
 .card {
   padding: 3em;
 }
-
+.selected{
+  border:1px solid #ffcc00 ;
+}
 .notebook-entry-container {
   /*background-color: #3e3e3a;  Paper-like background */
   /*border: 1px solid #ccc;  Subtle border */
@@ -169,15 +172,12 @@ ul{
   flex: 1; /* Each box takes up equal space */
   
   padding: 10px;
-  box-sizing: border-box; /* Include padding in width */border-color: var(--border-color);
-
-
+  box-sizing: border-box; /* Include padding in width */
+  border-color: var(--border-color);
 }
-.sidebar .selected {
-  background-color: #2a2a2a;
-}
+/* fix for missing closing bracket*/
 
-/* Add diary button styles */
+
 
 .add-diary-entry-button {
   background-color: #ffcc00; /* Bright yellow background */
@@ -199,9 +199,34 @@ ul{
   transform: scale(1.05); /* Slight scale up on hover */
 }
 
+.week-chip {
+  background-color: lightgray; /* Default background color for unselected */
+  color: black;
+  border-radius: 10px; /* Large border-radius for rounded appearance */
+  padding: 5px 10px; /* Padding around the text */
+  font-size: xx-small;
+}
+.normal-week{
+  border: 1px solid black; /* Thin solid black border */
+
+}
+.selected-week {
+  background-color: lightgray; /* Default background color for unselected */
+  color: rgb(54, 33, 33);
+ 
+  border: 1px solid yellowgreen; /* Thin solid black border */
+
+}
 .add-diary-entry-button,
 
 .modal {
+
+
+
+  
+
+/* Add diary button styles */
+
   position: fixed;
   top: 50%;
   left: 50%;
@@ -264,7 +289,7 @@ ul{
       width: 100%;
   }
     .sidebar-collapse-button {
-    position: absolute;
+    /*position: absolute;*/
     top: 0;
     right: 0;
     background-color: #f0f0f0;
